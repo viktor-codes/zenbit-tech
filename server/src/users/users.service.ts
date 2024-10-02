@@ -1,4 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -6,7 +7,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const existUser = await this.databaseService.user.findUnique({
@@ -26,8 +30,9 @@ export class UsersService {
         password: hashedPassword,
       },
     });
+    const token = this.jwtService.sign({ email: createUserDto.email });
 
-    return user;
+    return { user, token };
   }
 
   async findAll() {
