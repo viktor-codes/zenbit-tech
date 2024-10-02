@@ -17,13 +17,17 @@ export class UsersService {
       throw new ConflictException('This email already exists');
     }
 
-    return this.databaseService.user.create({
+    const hashedPassword = await argon2.hash(createUserDto.password);
+
+    const user = await this.databaseService.user.create({
       data: {
         name: createUserDto.name,
         email: createUserDto.email,
-        password: await argon2.hash(createUserDto.password),
+        password: hashedPassword,
       },
     });
+
+    return user;
   }
 
   async findAll() {
