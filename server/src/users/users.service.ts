@@ -1,4 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import * as argon2 from 'argon2';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -20,7 +21,7 @@ export class UsersService {
       data: {
         name: createUserDto.name,
         email: createUserDto.email,
-        password: createUserDto.password,
+        password: await argon2.hash(createUserDto.password),
       },
     });
   }
