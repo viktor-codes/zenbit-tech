@@ -34,9 +34,9 @@ export class UsersService {
     return this.databaseService.user.findMany();
   }
 
-  async findOne(id: number) {
-    return this.databaseService.user.findUnique({
-      where: { id },
+  async findOne(email: string) {
+    return await this.databaseService.user.findUnique({
+      where: { email },
     });
   }
 
