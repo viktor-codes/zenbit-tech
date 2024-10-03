@@ -9,6 +9,9 @@ export default {
 		extend: {
 			roboto: ['Roboto', 'sans-serif'],
 		},
+		backgroundImage: {
+			hero: "url('/main.jpg')",
+		},
 	},
 	plugins: [require('@tailwindcss/forms')],
 }
